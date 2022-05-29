@@ -87,7 +87,7 @@ function closeHandler(e) {
 
 function debounce(fn, delay) {
   let timer;
-  return function (e) {
+  return function () {
     let context = this;
     let args = arguments;
     clearTimeout(timer);
