@@ -1,26 +1,32 @@
 let cardHolder = document.querySelector('[data-id="card-holder"]');
 let modal = document.querySelector('[data-id="modal"]');
 let url = 'https://jsonplaceholder.typicode.com/users';
+let results = document.querySelector('[data-id="result"]');
 
 let countApiCalls = 0;
 let data = [];
 
 function search(e) {
+    if(e.target.value.length > 0) {
     fetch(url)
         .then(response => response.json())
         .then(users => {
             console.log(users);
             users.forEach(user => {
                 if(user.name.toLowerCase().includes(e.target.value.toLowerCase())) {
-                    data = [user];
                     let li = document.createElement('li');
                     li.innerHTML = `${user.name}`;
                     li.setAttribute('data-res-id', `${user.id}`);
-                    document.querySelector('[data-id="result"]').appendChild(li);
+                    results.classList.add('active');
+                    results.appendChild(li);
                 }
             })
     console.log('api called', countApiCalls++);
     })
+    } else {
+        results.classList.remove('active');
+        document.querySelector('[data-id="result"]').innerHTML = '';
+    }
 }
 function debounce(fn, delay) {
     let timer;
