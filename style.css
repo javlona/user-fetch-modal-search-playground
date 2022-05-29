@@ -51,6 +51,10 @@ li {
     cursor: pointer;
 }
 
+.results li:last-child {
+    border: none;
+}
+
 .results li:hover {
     background-color: #f5f5f5;
 }
