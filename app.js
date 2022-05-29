@@ -2,7 +2,6 @@ let cardHolder = document.querySelector('[data-id="card-holder"]');
 let modal = document.querySelector('[data-id="modal"]');
 
 cardHolder.addEventListener('click', function(e) {
-    console.log(e);
     if (e.target.classList.contains('card')) {
         let id = e.target.getAttribute('data-card-id');
         getUserInfo(id);
@@ -37,7 +36,6 @@ function getUserInfo(id) {
     fetch(`${url}/${id}`)
         .then(response => response.json())
         .then(user => {
-            console.log(user);
             modal.innerHTML = `
             <div class="modal-content">
                 <h3>${user.name}</h3>
