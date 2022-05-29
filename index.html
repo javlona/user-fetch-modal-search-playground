@@ -12,7 +12,14 @@
         tis is modal
     </div>
     <div class="wrapper">
-        <input type="text" id="input" class="input" placeholder="Search..." />
+        <input 
+            type="text" 
+            id="input" 
+            class="input" 
+            placeholder="Search..."  
+            onkeyup="searchDebounced(event)"
+            />
+        <ul class="results" data-id="result"></ul>
         <ul data-id="card-holder" class="card-holder">
             <!-- card content goes here -->
         </ul>

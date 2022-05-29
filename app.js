@@ -1,35 +1,63 @@
 let cardHolder = document.querySelector('[data-id="card-holder"]');
 let modal = document.querySelector('[data-id="modal"]');
-
-cardHolder.addEventListener('click', function(e) {
-    if (e.target.classList.contains('card')) {
-        let id = e.target.getAttribute('data-card-id');
-        getUserInfo(id);
-    }
-})
-
 let url = 'https://jsonplaceholder.typicode.com/users';
 
-function getUsers() {
+let countApiCalls = 0;
+let data = [];
 
+function search(e) {
     fetch(url)
         .then(response => response.json())
         .then(users => {
             console.log(users);
             users.forEach(user => {
-                let card = document.createElement('div');
-                card.classList.add('card');
-                card.setAttribute('data-card-id', `${user.id}`);
-                card.innerHTML = `
-                    <h3>${user.name}</h3>
-                    <p>${user.email}</p>
-                    <p>${user.phone}</p>
-                    <p>${user.website}</p>
-                    `
-                cardHolder.appendChild(card);
-                })      
+                if(user.name.toLowerCase().includes(e.target.value.toLowerCase())) {
+                    data = [user];
+                    let li = document.createElement('li');
+                    li.innerHTML = `${user.name}`;
+                    li.setAttribute('data-res-id', `${user.id}`);
+                    document.querySelector('[data-id="result"]').appendChild(li);
+                }
+            })
+    console.log('api called', countApiCalls++);
+    })
+}
+function debounce(fn, delay) {
+    let timer;
+    return function (e) {
+        let context = this;
+        let args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            fn.apply(context, args);
+        }, delay);
+    }
+}
+
+const searchDebounced = debounce(search, 500);
+
+function getUsers() {
+    fetch(url)
+        .then(response => response.json())
+        .then(users => {
+            createCards(users);
         })
         .catch(err => console.log(err));
+}
+
+function createCards(data) {
+    data.forEach(user => {
+        let card = document.createElement('div');
+        card.classList.add('card');
+        card.setAttribute('data-card-id', `${user.id}`);
+        card.innerHTML = `
+            <h3>${user.name}</h3>
+            <p>${user.email}</p>
+            <p>${user.phone}</p>
+            <p>${user.website}</p>
+            `
+        cardHolder.appendChild(card);
+        })      
 }
 
 function getUserInfo(id) {
@@ -42,6 +70,8 @@ function getUserInfo(id) {
                 <p>${user.email}</p>
                 <p>${user.phone}</p>
                 <p>${user.website}</p>
+                <p>${user.address.street}</p>
+                <p>${user.address.suite}</p>
                 <button class="modal-close" onclick="closeHandler(event)">x</button>
             </div>
                 `
@@ -57,4 +87,15 @@ function closeHandler(e) {
 }
 
 getUsers();
+
+window.addEventListener('DomContentLoaded', () => {
+    createCards(data)})
+
+cardHolder.addEventListener('click', function(e) {
+    if (e.target.classList.contains('card')) {
+        let id = e.target.getAttribute('data-card-id');
+        getUserInfo(id);
+    }
+})
+
 window.closeHandler = closeHandler
