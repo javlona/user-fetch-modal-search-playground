@@ -44,6 +44,7 @@ function getUserInfo(id) {
                 <p>${user.email}</p>
                 <p>${user.phone}</p>
                 <p>${user.website}</p>
+                <button class="modal-close" onclick="closeHandler(event)">x</button>
             </div>
                 `
             modal.classList.add('show');
@@ -51,4 +52,11 @@ function getUserInfo(id) {
         })
 }
 
+function closeHandler(e) {
+    e.stopPropagation();
+    console.log(e, 'close');
+    modal.classList.remove('show');
+}
+
 getUsers();
+window.closeHandler = closeHandler
